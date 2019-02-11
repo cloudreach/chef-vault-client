@@ -1,0 +1,28 @@
+image: docker-local.artifactory.platform.nwm-poc.com/cac-pipeline/cookbook-testing:1.0.1
+services:
+  - docker:dind
+
+stages:
+  - test
+  - deploy
+
+test-cookbook:
+  stage: test
+  variables:
+   USER: kitchen-test
+   SSH_KEY: kitchen
+  script:
+   - export USER=$USER; export SSH_KEY=$SSH_KEY
+   - echo $TK_KEY > service-account-key.json
+   - export GOOGLE_APPLICATION_CREDENTIALS="service-account-key.json"
+   - if chef-test .; then echo 'tests passed'; else kitchen destroy; exit 1; fi
+upload-cookbook:
+  stage: deploy
+  script:
+   - "cd .."
+   - "mkdir -p ~/.chef"
+   - "echo \"knife[:supermarket_site] = 'https://$ARTIFACTORY_USER:$ARTIFACTORY_KEY@artifactory.platform.nwm-poc.com/artifactory/api/chef/chef'\"   > ~/.chef/knife.rb"
+   - "echo \"cookbook_path [ '.', '..' ]\" >> ~/.chef/knife.rb"
+   - "knife artifactory share vault_client"
+   - "echo Cookbook pushed to Artifactory"
+  only: [master]

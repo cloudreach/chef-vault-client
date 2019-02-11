@@ -1,0 +1,17 @@
+name 'vault_client'
+maintainer 'NWM'
+maintainer_email 'TBD@tbd.com'
+license 'All Rights Reserved'
+description 'Installs/Configures vault_client'
+long_description 'Installs/Configures vault_client'
+source_url 'https://gitlab.platform.nwm-poc.com/cloud-platform/chef/vault_client/issues'
+issues_url 'https://gitlab.platform.nwm-poc.com/cloud-platform/chef/vault_client/'
+version '1.0.2'
+chef_version '>= 13.0'
+
+supports 'windows'
+supports 'centos'
+supports 'debian'
+supports 'ubuntu'
+
+gem 'vault'
