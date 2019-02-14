@@ -1,0 +1,31 @@
+driver:
+  name: gce
+  project: REPLACE_WITH_{GCP_PROJECT_ID}
+  zone: europe-west2-c
+  email: tbd@tbd.com
+  tags:
+    - test-kitchen
+  metadata:
+    ssh-keys: <%= ENV['USER'] + ':' + IO.binread("#{ENV['SSH_KEY']}.pub").rstrip! %>
+  network: REPLACE_WITH_{GCP_VPC_NAME}
+  subnet: dREPLACE_WITH_{GCP_SUBNET_NAME}
+  service_account_scopes:
+   - compute
+  service_account_name: REPLACE_WITH_{GCP_SERVICE_ACCOUNT_ADDRESS}
+verifier:
+  name: inspec
+provisioner:
+  name: chef_solo
+transport:
+  username: <%= ENV['USER'] %>
+  ssh_key: <%= ENV['SSH_KEY'] %>
+platforms:
+  - name: centos-7
+    driver:
+      image_project: centos-cloud
+      image_name: centos-7-v20181210
+      use_private_ip: false
+suites:
+  - name: default
+    run_list:
+      - recipe[vault_client::test]

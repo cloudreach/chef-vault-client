@@ -1,0 +1,7 @@
+DEPENDENCIES
+  vault_client
+    path: .
+    metadata: true
+
+GRAPH
+  vault_client (1.0.2)
